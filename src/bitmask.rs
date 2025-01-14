@@ -1,8 +1,4 @@
-pub fn example() {
-}
-
-pub fn check(bitmask: i32) {
-
+pub fn check_bitmask(bitmask: i32) {
     const EPOLLONESHOT: i32 = 0x40000000;
     const EPOLLIN: i32 = 0x1;
     const EPOLLET: i32 = 1 << 31;
@@ -19,7 +15,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_check() {
+    fn test_check_bitmask() {
         // TEST 1 from https://tools.ietf.org/html/rfc8032#section-7.1
 //        let mut privkey = [0u8; 32];
 //        privkey.copy_from_slice(
@@ -35,13 +31,15 @@ mod tests {
 //
 
         let bitflag_a: i32 = 1 << 31;
+        let bitflag_f: i32 = 1 << 30;
         let bitflag_b: i32 = 0x1;
-        let bitmask: i32 = bitflag_b | bitflag_b;
+        let bitmask: i32 = bitflag_a | bitflag_b;
 
-        println!("bitflag_a:032b");
-        println!("bitflag_b:032b");
-        println!("bitmask:032b");
-        check(bitmask);
+        println!("{bitflag_a:032b}");
+        println!("{bitflag_b:032b}");
+        println!("{bitflag_f:032b}");
+        println!("{bitmask:032b}");
+        println!("{:?}", check_bitmask(bitmask));
 
     }
 }
