@@ -2,8 +2,9 @@ mod ffi;
 mod poll;
 mod bitmask;
 
-use std::io::Write;
+use std::{io::Write, net::TcpStream};
 
+use ffi::Event;
 use poll::Poll;
 
 fn main() -> Result<()> {
@@ -29,10 +30,26 @@ fn main() -> Result<()> {
 
     }
 
+    let mut handled_events = 0;
+    while handled_events < n_events {
+        let mut events = Vec::with_capacity(10);
+        poll.poll(&mut events, None);
 
+        if events.is_empty() {
+            println!("TIMEOUT OR (SERIOUS EVENT NOTIFICATION)");
+            continue;
+        }
+
+        handled_events += handle_events(&events, &mut streams)?;
+    }
 
     Ok(())
+}
 
+
+fn handle_events(events: &[Event], streams: &mut [TcpStream], ) -> Result<usize> {
+    let mut handled_events = 0;
+    Ok(handled_events)
 }
 
 fn get_req(path: &str) -> String {
