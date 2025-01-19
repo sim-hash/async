@@ -2,7 +2,7 @@ mod ffi;
 mod poll;
 mod bitmask;
 
-use std::{io::{Write, Result, Read}, net::TcpStream};
+use std::{io::{Write, Result, Read, self, ErrorKind}, net::TcpStream};
 
 use ffi::Event;
 use poll::Poll;
@@ -63,16 +63,13 @@ fn handle_events(events: &[Event], streams: &mut [TcpStream]) -> Result<usize> {
                 Ok(n) => {
                     let txt = String::from_utf8_lossy(&data[..n]);
                     println!("RECEIVED: {:?}", event);
-                    println!("{txt}\n------\n");
+                    println!("{txt}\n-----\n");
                 }
-                // Not ready to read in a non-blocking manner. This could
-                // happen even if the event was reported as ready
                 Err(e) if e.kind() == io::ErrorKind::WouldBlock => break,
                 Err(e) => return Err(e),
             }
         }
     }
-
     Ok(handled_events)
 }
 
