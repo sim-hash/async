@@ -1,4 +1,4 @@
-use std::{net::TcpStream, io::{Result, self}, os::fd::{AsFd, AsRawFd}};
+use std::{net::TcpStream, io::{Result, self}, os::fd::AsRawFd};
 use crate::ffi::{self, Event};
 
 type Events = Vec<ffi::Event>;

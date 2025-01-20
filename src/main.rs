@@ -2,15 +2,12 @@ mod ffi;
 mod poll;
 mod bitmask;
 
-use std::{io::{Write, Result, Read, self, ErrorKind}, net::TcpStream};
+use std::{io::{Write, Result, Read, ErrorKind}, net::TcpStream};
 
 use ffi::Event;
 use poll::Poll;
 
 fn main() -> Result<()> {
-    println!("---------------------------------------------------- Test --------------------------------------------------------------");
-    println!("---------------------------------------------------- End Test --------------------------------------------------------------");
-
     let mut poll = Poll::new()?;
     let n_events = 5;
 
@@ -65,7 +62,7 @@ fn handle_events(events: &[Event], streams: &mut [TcpStream]) -> Result<usize> {
                     println!("RECEIVED: {:?}", event);
                     println!("{txt}\n-----\n");
                 }
-                Err(e) if e.kind() == io::ErrorKind::WouldBlock => break,
+                Err(e) if e.kind() == ErrorKind::WouldBlock => break,
                 Err(e) => return Err(e),
             }
         }
