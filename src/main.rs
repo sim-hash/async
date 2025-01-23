@@ -9,7 +9,7 @@ use poll::Poll;
 
 fn main() -> Result<()> {
     let mut poll = Poll::new()?;
-    let n_events = 5;
+    let n_events = 100;
 
     let mut streams = vec![];
     let addr = "localhost:8080";
@@ -29,8 +29,8 @@ fn main() -> Result<()> {
 
     let mut handled_events = 0;
     while handled_events < n_events {
-        let mut events = Vec::with_capacity(10);
-        poll.poll(&mut events, None);
+        let mut events = Vec::with_capacity(200);
+        poll.poll(&mut events, None)?;
 
         if events.is_empty() {
             println!("TIMEOUT OR (SERIOUS EVENT NOTIFICATION)");

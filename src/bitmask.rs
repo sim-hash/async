@@ -1,4 +1,4 @@
-pub fn check_bitmask(bitmask: i32) {
+fn check_bitmask(bitmask: i32) {
     const EPOLLONESHOT: i32 = 0x40000000;
     const EPOLLIN: i32 = 0x1;
     const EPOLLET: i32 = 1 << 31;

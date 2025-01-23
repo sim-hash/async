@@ -1,5 +1,5 @@
 use std::{net::TcpStream, io::{Result, self}, os::fd::AsRawFd};
-use crate::ffi::{self, Event};
+use crate::ffi::{self};
 
 type Events = Vec<ffi::Event>;
 
