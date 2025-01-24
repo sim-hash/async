@@ -2,14 +2,35 @@ mod ffi;
 mod poll;
 mod bitmask;
 
-use std::{io::{Write, Result, Read, ErrorKind}, net::TcpStream};
+use std::{io::{Write, Result, Read, ErrorKind}, net::TcpStream, env};
 
 use ffi::Event;
 use poll::Poll;
 
 fn main() -> Result<()> {
     let mut poll = Poll::new()?;
-    let n_events = 100;
+    let n_events = 5;
+ 
+    let mut stream = vec![];
+    let base_url = env::args().nth(1).unwrap_or_else(|| String::from("localhost"));
+
+    let addr = format!("{}:8080", &base_url);
+    for i in 0..n_events {
+        let delay = (n_events - 1) * 1000;
+        let url_path = format!("/{delay}request-{1}");
+        let request = get_req(&url_path);
+        let std_stream = std::net::TcpStream::connect(&addr)?;
+        std_stream.set_nonblocking(true)?
+
+
+    }
+
+    Ok(())
+}
+
+fn poll_events() -> Result<()> {
+    let mut poll = Poll::new()?;
+    let n_events = 5;
 
     let mut streams = vec![];
     let addr = "localhost:8080";
@@ -29,7 +50,7 @@ fn main() -> Result<()> {
 
     let mut handled_events = 0;
     while handled_events < n_events {
-        let mut events = Vec::with_capacity(200);
+        let mut events = Vec::with_capacity(10);
         poll.poll(&mut events, None)?;
 
         if events.is_empty() {
@@ -42,7 +63,6 @@ fn main() -> Result<()> {
 
     Ok(())
 }
-
 
 fn handle_events(events: &[Event], streams: &mut [TcpStream]) -> Result<usize> {
     let mut handled_events = 0;
